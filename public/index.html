@@ -1012,7 +1012,7 @@ async function startApp(){
     syncEnabled=true;
     setSyncStatus('Synced');
   }catch(e){
-    syncEnabled=location.protocol==='http:'||location.protocol==='https:';
+    syncEnabled=false;
     setSyncStatus('Local only');
   }
   go(h?+h:0);
