@@ -1,0 +1,1023 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Sarah Learns AI</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a click-through course, one scene per screen, ten levels climbing from Novice to Expert, fixed bottom nav like a phone app */
+:root{
+  --bg:#F7F8FA; --surface:#FFFFFF; --ink:#16202B; --muted:#5B6673; --line:#DFE3E8;
+  --accent:#1F4E79; --accent-soft:#E6EEF6; --mark:#FFE28A; --good:#1E7B4F; --bad:#B3402F;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Figtree",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F151C; --surface:#17202A; --ink:#E8EDF2; --muted:#9AA6B2; --line:#2A3542;
+  --accent:#7FB2E0; --accent-soft:#1C2C3C; --mark:#6B5A1E; --good:#5CC08E; --bad:#E58A7A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F151C; --surface:#17202A; --ink:#E8EDF2; --muted:#9AA6B2; --line:#2A3542;
+  --accent:#7FB2E0; --accent-soft:#1C2C3C; --mark:#6B5A1E; --good:#5CC08E; --bad:#E58A7A; color-scheme:dark}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;margin:0}
+*{box-sizing:border-box}
+.app{height:100%;display:flex;flex-direction:column;max-width:760px;margin:0 auto}
+.top{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 8px;display:flex;flex-direction:column;gap:8px}
+.toprow{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.toprow .rank{color:var(--accent)}
+.sync{font-size:11px;letter-spacing:0;text-transform:none;font-weight:500;white-space:nowrap}
+.bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+main{flex:1;overflow-y:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:8px 28px}
+.scene{display:flex;flex-direction:column;gap:16px;animation:in .35s ease}
+@keyframes in{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.scene{animation:none}*{transition:none!important}}
+h1,h2{font-family:var(--display);font-weight:700;line-height:1.1;margin:0;text-wrap:balance}
+h1{font-size:clamp(30px,8vw,44px)}
+h2{font-size:clamp(24px,6vw,32px)}
+h3{font-size:16px;margin:0;font-weight:600}
+p{margin:0;max-width:64ch}
+.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.story{border-left:3px solid var(--accent);padding:4px 0 4px 14px}
+.story b{font-weight:600}
+.coach{background:var(--accent-soft);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.tag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--accent)}
+.words{border:1.5px dashed var(--accent);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.words dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px}
+.words dt{font-weight:700;font-family:var(--display)}
+.words dd{margin:0;color:var(--muted);font-size:14.5px}
+@media (max-width:460px){.words dl{grid-template-columns:1fr}.words dd{margin-bottom:6px}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (max-width:560px){.grid2,.grid3{grid-template-columns:1fr}}
+.mono{font-family:var(--mono);font-size:13px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+mark{background:var(--mark);color:inherit;padding:0 2px;border-radius:2px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{background:var(--accent);color:var(--bg);border:0;border-radius:999px;padding:12px 20px;font-weight:600}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.sm{padding:8px 14px;font-size:14px}
+.btn[disabled]{opacity:.35;cursor:default}
+nav.foot{display:flex;gap:10px;justify-content:space-between;align-items:center;border-top:1px solid var(--line);background:var(--bg);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px calc(12px + env(safe-area-inset-bottom,0px))}
+nav.foot .count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.small{font-size:13.5px;color:var(--muted)}
+ul.clean{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+ul.clean li{display:flex;gap:10px;align-items:flex-start}
+.dot{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700}
+.dot.y{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good)}
+.dot.n{background:color-mix(in srgb,var(--bad) 18%,transparent);color:var(--bad)}
+.dot.a{background:var(--accent);color:var(--bg)}
+svg text{font-family:var(--body)}
+.illo{width:100%;max-width:100%;height:auto}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:520px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+td:first-child{font-weight:600}
+/* level map */
+.ladder{display:flex;flex-direction:column-reverse;gap:6px}
+.rung{display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.rung .n{font-family:var(--display);font-size:20px;font-weight:700;color:var(--accent);text-align:center}
+.rung p{font-size:13.5px;color:var(--muted)}
+.rung .rk{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+/* prediction */
+.sentence{font-family:var(--display);font-size:clamp(22px,6vw,28px);font-weight:500;line-height:1.3;min-height:2.6em}
+.sentence .new{background:var(--mark);border-radius:3px;padding:0 3px}
+.prob{display:grid;grid-template-columns:90px 1fr 44px;gap:8px;align-items:center;font-size:14px}
+.prob .track{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.prob .fill{height:100%;background:var(--accent);transition:width .4s}
+.prob .pct{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+/* flip cards */
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media (max-width:420px){.cards{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:left;display:flex;flex-direction:column;gap:6px}
+.card .term{font-family:var(--display);font-weight:700;font-size:18px}
+.card .def{font-size:14px;color:var(--muted)}
+.card .hint{font-size:12.5px;color:var(--accent);font-weight:600}
+/* costar */
+.costar{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.costar button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}
+.costar button b{font-family:var(--display);font-size:22px;line-height:1}
+.costar button span{font-size:10.5px;color:var(--muted)}
+.costar button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.costar button[aria-pressed="true"] span{color:var(--bg);opacity:.85}
+.meter{display:flex;gap:4px}
+.meter i{flex:1;height:8px;border-radius:4px;background:var(--line);transition:background .3s}
+.meter i.on{background:var(--good)}
+.out{background:var(--bg);border-radius:10px;padding:12px;font-size:14.5px}
+.label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+/* week */
+.week{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.day{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 6px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.day .d{font-size:12px;font-weight:700;text-align:center;color:var(--muted)}
+.task{font-size:11.5px;line-height:1.3;padding:5px 6px;border-radius:6px;background:var(--bg)}
+.task.rep{background:var(--mark)}
+/* skill card */
+.skill{border:1.5px solid var(--accent);border-radius:12px;overflow:hidden;background:var(--surface)}
+.skill header{background:var(--accent);color:var(--bg);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-weight:600;gap:8px}
+.skill .row{padding:10px 14px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+/* chat bubbles */
+.chat{display:flex;flex-direction:column;gap:8px}
+.msg{max-width:88%;padding:10px 12px;border-radius:14px;font-size:14.5px}
+.msg.me{align-self:flex-end;background:var(--accent);color:var(--bg);border-bottom-right-radius:4px}
+.msg.ai{align-self:flex-start;background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:4px}
+.panel .msg.ai{background:var(--bg)}
+/* mock app window */
+.mock{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);box-shadow:0 8px 24px -16px rgba(0,0,0,.35)}
+.mock .chrome{display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--bg);border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
+.mock .chrome i{width:9px;height:9px;border-radius:50%;background:var(--line);display:inline-block}
+.mock .chrome span{margin-left:8px}
+.mock .body{display:grid;grid-template-columns:150px 1fr;min-height:260px}
+@media (max-width:520px){.mock .body{grid-template-columns:96px 1fr}}
+.mock .side{border-right:1px solid var(--line);padding:10px 8px;display:flex;flex-direction:column;gap:6px;font-size:12.5px;background:var(--bg)}
+.mock .side .it{padding:5px 6px;border-radius:6px;display:flex;align-items:center;gap:4px;min-width:0;overflow-wrap:anywhere}
+.mock .side .it.on{background:var(--accent-soft);font-weight:600}
+.mock .side .grp{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.mock .pane{padding:12px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.mock .composer{margin-top:auto;border:1px solid var(--line);border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;gap:8px;font-size:13px}
+.mock .composer .ph{color:var(--muted)}
+.mock .composer .tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.mock .pill{border:1px solid var(--line);border-radius:999px;padding:2px 8px;font-size:11.5px;display:inline-flex;align-items:center;gap:4px}
+.mock .send{margin-left:auto;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--bg);display:grid;place-items:center;font-size:12px}
+.mock .row2{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px}
+.mock .field{display:flex;flex-direction:column;gap:3px;font-size:12px}
+.mock .field .v{border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:13px;background:var(--bg)}
+.tog{width:30px;height:17px;border-radius:9px;background:var(--line);position:relative;flex:none}
+.tog::after{content:"";position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:var(--surface)}
+.tog.on{background:var(--good)}.tog.on::after{left:15px}
+.cb{flex:none;width:18px;height:18px;border-radius:50%;background:var(--mark);color:var(--ink);font-size:11px;font-weight:700;display:inline-grid;place-items:center;border:1px solid color-mix(in srgb,var(--ink) 25%,transparent)}
+.legend{display:flex;flex-direction:column;gap:8px}
+.legend div{display:flex;gap:10px;align-items:flex-start;font-size:14.5px}
+.caption{font-size:12px;color:var(--muted);font-style:italic}
+/* connectors */
+.plugs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.plug{border:1px dashed var(--line);background:var(--surface);border-radius:10px;padding:12px;text-align:left;display:flex;flex-direction:column;gap:2px}
+.plug b{font-size:15px}
+.plug span{font-size:12.5px;color:var(--muted)}
+.plug[aria-pressed="true"]{border-style:solid;border-color:var(--good)}
+.plug[aria-pressed="true"] b::after{content:"  connected";font-size:11px;color:var(--good);font-weight:600}
+/* flow steps */
+.steps{display:flex;flex-direction:column}
+.step{display:grid;grid-template-columns:28px 1fr;gap:12px;padding-bottom:14px;position:relative;opacity:.35;transition:opacity .4s}
+.step.on{opacity:1}
+.steps.static .step{opacity:1}
+.step::before{content:"";position:absolute;left:13px;top:28px;bottom:0;width:2px;background:var(--line)}
+.step:last-child::before{display:none}
+.step .num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--bg);display:grid;place-items:center;font-size:12px;font-weight:700}
+.step .num.you{background:var(--mark);color:var(--ink)}
+.step .src{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+#cap .step{grid-template-columns:46px 1fr}#cap .num{width:46px;border-radius:14px;font-size:11.5px}#cap .step::before{left:22px}
+/* quiz */
+.quiz{background:var(--surface);border:1.5px solid var(--accent);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.quiz .q{font-weight:600}
+.opt{text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 12px;font-size:14.5px}
+.opt.right{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.why{font-size:14px;padding:10px 12px;border-radius:8px;background:var(--accent-soft)}
+textarea{width:100%;min-height:84px;font:inherit;font-size:15px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical}
+/* order exercise */
+.ord{display:flex;flex-direction:column;gap:6px}
+.ord button{text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 12px;font-size:14.5px;display:flex;gap:10px;align-items:center}
+.ord button .k{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:12px;font-weight:700;flex:none}
+.ord button.picked{opacity:.55}
+.ord button.picked .k{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+/* agent loop */
+.loopwrap{display:flex;justify-content:center}
+/* checklist */
+.check{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}
+.check:first-child{border-top:0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--accent);flex:none}
+.check label{display:flex;flex-direction:column;gap:2px;cursor:pointer}
+.check .when{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
+.menu{display:flex;flex-direction:column;gap:6px}
+.menu button{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.menu button span{color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.score{font-family:var(--display);font-size:56px;font-weight:700;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
+.arch{display:flex;flex-direction:column;gap:8px}
+.lane{display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:stretch}
+.lane .ln{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:10px}
+.lane .bx{display:flex;flex-wrap:wrap;gap:6px}
+.lane .bx span{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px;font-size:13.5px;font-weight:500}
+.lane .bx span.hl{border-color:var(--accent);background:var(--accent-soft)}
+.lane .bx span.you{background:var(--mark);border-color:transparent}
+@media (max-width:460px){.lane{grid-template-columns:1fr}.lane .ln{padding-top:0}}
+</style>
+
+<div class="app">
+  <div class="top">
+    <div class="toprow"><span id="chap">Start</span><span class="rank" id="rank"></span><span class="sync" id="syncStatus" role="status" aria-live="polite">Connecting</span><button id="menuBtn" class="chip" style="padding:4px 12px;font-size:12px">Levels</button></div>
+    <div class="bar"><i id="bar"></i></div>
+  </div>
+  <main id="main"></main>
+  <nav class="foot">
+    <button class="btn ghost" id="back">Back</button>
+    <span class="count" id="count"></span>
+    <button class="btn" id="next">Next</button>
+  </nav>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+const S=[], LEVELS=[];
+let LV=null;
+function level(n,name,rank,blurb){LV={n,name,rank,blurb,start:S.length};LEVELS.push(LV);}
+function add(html,init){S.push({lv:LV,html,init});}
+const syncStatus=document.getElementById('syncStatus');
+let syncEnabled=false,syncQueue=Promise.resolve();
+const pendingSync=new Map();
+function setSyncStatus(value){syncStatus.textContent=value;}
+function syncValue(k,v){
+  if(!syncEnabled)return;
+  clearTimeout(pendingSync.get(k));
+  pendingSync.set(k,setTimeout(()=>{
+    pendingSync.delete(k);
+    syncQueue=syncQueue.catch(()=>{}).then(async()=>{
+      setSyncStatus('Saving');
+      const response=await fetch('/api/progress',{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify({key:k,value:v})});
+      if(!response.ok)throw new Error('Progress sync failed.');
+      setSyncStatus('Synced');
+    }).catch(()=>setSyncStatus('Local only'));
+  },300));
+}
+const store={get(k,d){try{const v=localStorage.getItem('sla-'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('sla-'+k,JSON.stringify(v))}catch(e){}syncValue(k,v)},keys(){try{return Object.keys(localStorage).filter(k=>k.startsWith('sla-'))}catch(e){return[]}}};
+const QUIZ={}; let QN=0;
+function quiz(q,opts){const id='q'+(++QN);QUIZ[id]=opts;
+  return `<div class="quiz" data-quiz="${id}"><div class="tag">Check your understanding</div><div class="q">${q}</div>${opts.map((o,i)=>`<button class="opt" data-i="${i}">${o[0]}</button>`).join('')}<div class="why" hidden></div></div>`;}
+function reflect(id,q,ph){return `<div class="panel"><div class="tag">Your turn to think</div><label for="r-${id}" style="font-weight:600">${q}</label><textarea id="r-${id}" data-reflect="${id}" placeholder="${ph}"></textarea><span class="small">Saved on this device and synced to the course server when online.</span></div>`;}
+function words(list){return `<div class="words"><div class="tag">New words on this screen</div><dl>${list.map(([t,d])=>`<dt>${t}</dt><dd>${d}</dd>`).join('')}</dl></div>`;}
+function coach(tag,html){return `<div class="coach"><span class="tag">${tag}</span><p>${html}</p></div>`;}
+const MOCKNOTE='<p class="caption">Simplified drawing to show the layout. Real screens change often, so yours may look a little different.</p>';
+
+/* =========================================================
+   START
+   ========================================================= */
+level(0,"Start","","Meet Sarah");
+add(`
+<div class="eyebrow">A course in ten levels</div>
+<h1>Sarah bakes bread. By the end, AI runs her marketing.</h1>
+<p class="story"><b>Sarah Namata</b> runs Namata Bakes in Ntinda, Kampala. Three staff, a small shop, most orders on WhatsApp. She has never opened an AI app. We will follow her from her first message all the way to an AI setup that plans, designs and publishes her marketing every Monday while she is in the kitchen.</p>
+<div class="panel">
+  <div class="label">The ten levels</div>
+  <div class="ladder" id="map"></div>
+</div>
+${coach("How this course works","Every level does three things. It <b>introduces new words</b> before using them, <b>shows</b> what it looks like on screen, then <b>checks</b> you understood with a short question. Take your time. Your progress saves on this device and syncs to the course server when online.")}
+`,()=>{document.getElementById('map').innerHTML=LEVELS.filter(l=>l.n>0).map(l=>`<div class="rung"><div class="n">${l.n}</div><div><h3>${l.name}</h3><p>${l.blurb}</p></div><span class="rk">${l.rank}</span></div>`).join('');});
+
+add(`
+<div class="eyebrow">The big idea of this course</div>
+<h2>Treat AI like a new hire you are training</h2>
+<p>Everything you will learn maps onto something you already do when you take on a new staff member. Keep this picture in mind. Each level adds one more thing you would do for a real employee.</p>
+<div class="panel"><div class="scroll"><table>
+<tr><th>With a new hire you…</th><th>With AI this is called…</th><th>Level</th></tr>
+<tr><td>Hire someone bright</td><td>Choosing a model like Claude, ChatGPT or Gemini</td><td>1</td></tr>
+<tr><td>Give clear instructions</td><td>Prompting</td><td>2</td></tr>
+<tr><td>Hand them the files and let them learn about you</td><td>Projects and memory</td><td>3</td></tr>
+<tr><td>Write how-to cards for repeat jobs</td><td>Skills</td><td>4</td></tr>
+<tr><td>Give them logins to the systems they need</td><td>Connectors and MCP</td><td>5</td></tr>
+<tr><td>Teach them a full routine, step by step</td><td>Workflows</td><td>6</td></tr>
+<tr><td>Trust them to figure out the steps themselves</td><td>Agents</td><td>7</td></tr>
+<tr><td>Give them a weekly schedule</td><td>Scheduled tasks</td><td>8</td></tr>
+<tr><td>Let them run a whole department, with sign-off</td><td>An end-to-end AI system</td><td>9</td></tr>
+<tr><td>Review, coach and improve them</td><td>Expert habits</td><td>10</td></tr>
+</table></div></div>
+${coach("One rule that never changes","However skilled the new hire gets, <b>you stay the manager</b>. You decide what they can touch, and you check their work, most closely at the start.")}
+`);
+
+/* =========================================================
+   LEVEL 1
+   ========================================================= */
+level(1,"Understand what AI is","Novice","What it is, how it answers, what it cannot know");
+add(`
+<div class="eyebrow">Level 1 · What is AI?</div>
+<h2>A new assistant who has read almost everything</h2>
+${words([["AI","Artificial intelligence. Software that can do tasks we normally think need a human brain, like writing or reasoning."],["Model","The trained 'brain' inside an AI app. Claude, GPT and Gemini are models, made by Anthropic, OpenAI and Google."],["Training","How the model learned: by reading an enormous amount of text and finding patterns in it."]])}
+<svg class="illo" viewBox="0 0 360 170" role="img" aria-label="Pages of text flow into a model, which answers your question">
+  <g fill="var(--surface)" stroke="var(--line)" stroke-width="1.5">
+    <rect x="10" y="40" width="34" height="46" rx="3"/><rect x="18" y="30" width="34" height="46" rx="3"/><rect x="26" y="20" width="34" height="46" rx="3"/>
+    <rect x="10" y="100" width="34" height="46" rx="3"/><rect x="18" y="92" width="34" height="46" rx="3"/></g>
+  <g stroke="var(--muted)" stroke-width="1.2"><line x1="32" y1="32" x2="54" y2="32"/><line x1="32" y1="40" x2="54" y2="40"/><line x1="32" y1="48" x2="48" y2="48"/><line x1="24" y1="104" x2="46" y2="104"/><line x1="24" y1="112" x2="40" y2="112"/></g>
+  <text x="38" y="164" text-anchor="middle" font-size="11" fill="var(--muted)">books, websites, manuals</text>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="var(--accent)"/></marker></defs>
+  <path d="M74 85 H128" stroke="var(--accent)" stroke-width="2" marker-end="url(#ar)"/>
+  <circle cx="180" cy="85" r="46" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+  <g stroke="var(--accent)" stroke-width="1.2"><circle cx="165" cy="72" r="4" fill="var(--accent)"/><circle cx="195" cy="68" r="4" fill="var(--accent)"/><circle cx="182" cy="96" r="4" fill="var(--accent)"/><circle cx="160" cy="100" r="4" fill="var(--accent)"/><circle cx="202" cy="98" r="4" fill="var(--accent)"/><line x1="165" y1="72" x2="195" y2="68"/><line x1="165" y1="72" x2="182" y2="96"/><line x1="195" y1="68" x2="202" y2="98"/><line x1="182" y1="96" x2="160" y2="100"/><line x1="182" y1="96" x2="202" y2="98"/></g>
+  <text x="180" y="150" text-anchor="middle" font-size="11" fill="var(--muted)">the model learns patterns</text>
+  <path d="M232 85 H276" stroke="var(--accent)" stroke-width="2" marker-end="url(#ar)"/>
+  <rect x="282" y="52" width="70" height="66" rx="10" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"/>
+  <rect x="290" y="62" width="44" height="10" rx="5" fill="var(--accent)"/><rect x="290" y="80" width="54" height="10" rx="5" fill="var(--line)"/><rect x="290" y="98" width="38" height="10" rx="5" fill="var(--line)"/>
+  <text x="317" y="140" text-anchor="middle" font-size="11" fill="var(--muted)">it answers you</text>
+</svg>
+${coach("Coach's note","Do not think 'robot' or 'search engine.' Think <b>very well-read new hire</b>. Bright, fast, never tired, but it started work this morning and knows nothing about your shop yet.")}
+`);
+
+add(`
+<div class="eyebrow">Level 1 · How it answers</div>
+<h2>It writes one word at a time, picking the most likely next word</h2>
+<p>Under the hood, AI is a very powerful guesser. It looks at everything written so far and predicts what comes next. Tap the button to watch it build Sarah's sentence.</p>
+<div class="panel">
+  <div class="sentence" id="sent">Our bread is baked</div>
+  <div id="probs" style="display:flex;flex-direction:column;gap:6px"></div>
+  <button class="btn" id="predict" style="align-self:flex-start">Predict next word</button>
+</div>
+${coach("Why this matters for you","Because it predicts from what you give it, <b>the words you type steer everything</b>. A vague question gets the most average answer. A detailed one gets an answer shaped for you. That is the secret of Level 2.")}
+`,()=>{
+  const steps=[[["fresh",58],["daily",24],["with",11]],[["every",64],["each",19],["in",9]],[["morning",61],["day",27],["night",4]],[["in",47],[".",33],["by",12]],[["Ntinda",52],["Kampala",31],["our",10]]];
+  let i=0;const sent=document.getElementById('sent'),probs=document.getElementById('probs'),b=document.getElementById('predict');
+  const show=()=>{if(i>=steps.length){probs.innerHTML='<p class="small">Five guesses in a row made a sensible sentence. A full answer is thousands of these.</p>';b.textContent='Start again';return;}
+    probs.innerHTML=steps[i].map(([w,p],k)=>`<div class="prob"><span>${k?w:'<b>'+w+'</b>'}</span><div class="track"><div class="fill" style="width:0" data-w="${p}"></div></div><span class="pct">${p}%</span></div>`).join('');
+    requestAnimationFrame(()=>probs.querySelectorAll('.fill').forEach(f=>f.style.width=f.dataset.w+'%'));};
+  b.onclick=()=>{if(i>=steps.length){i=0;sent.textContent='Our bread is baked';b.textContent='Predict next word';show();return;}
+    const w=steps[i][0][0];sent.querySelectorAll('.new').forEach(n=>n.classList.remove('new'));
+    sent.insertAdjacentHTML('beforeend',(w==='.'?'':' ')+`<span class="new">${w}</span>`);i++;show();};
+  probs.innerHTML='<p class="small">Each tap shows the top guesses and picks the most likely one.</p>';
+});
+
+add(`
+<div class="eyebrow">Level 1 · What it can and cannot do</div>
+<h2>Brilliant at language. Blind to your business until you show it.</h2>
+<div class="grid2">
+  <div class="panel"><div class="label">Great at</div><ul class="clean">
+    <li><span class="dot y">✓</span>Drafting posts, emails, replies to customers</li>
+    <li><span class="dot y">✓</span>Summarising long documents or messages</li>
+    <li><span class="dot y">✓</span>Brainstorming names, offers, ideas</li>
+    <li><span class="dot y">✓</span>Explaining things simply, translating</li>
+    <li><span class="dot y">✓</span>Turning messy notes into a clean plan or table</li></ul></div>
+  <div class="panel"><div class="label">Watch out for</div><ul class="clean">
+    <li><span class="dot n">!</span>It does not know your prices, stock or customers unless you tell it or connect it</li>
+    <li><span class="dot n">!</span>It can sound confident and still be wrong. Check numbers, dates and facts</li>
+    <li><span class="dot n">!</span>Each new chat starts fresh unless you use projects or memory (Level 3)</li>
+    <li><span class="dot n">!</span>Do not paste anything you would not hand a new staff member, like card numbers or passwords</li></ul></div>
+</div>
+${coach("The rule of thumb","AI does the first draft fast. You check it, correct it and decide. An hour of writing becomes ten minutes of reviewing.")}
+`);
+
+add(`
+<div class="eyebrow">Level 1 · Check</div>
+<h2>Quick check before Level 2</h2>
+${quiz("Sarah asks the AI: 'What did we sell most of last week?' and it gives a confident answer. What should she think?",[
+ ["Great, it knows her sales.",0,"Not yet. Nothing has connected it to her sales records, so the answer is a guess dressed up as a fact."],
+ ["It is guessing. It cannot see her sales unless she pastes them in or connects her records.",1,"Exactly. A model only knows what it learned in training plus what you give it. Her sales are not in either."],
+ ["It must have searched the internet for her shop.",0,"Even with web search, her private sales numbers are not on the internet. The answer is made up."]])}
+${quiz("Why does a detailed question usually get a better answer?",[
+ ["Because the AI tries harder when you type more.",0,"It does not 'try harder.' It predicts from what you give it."],
+ ["Because the AI predicts its answer from your words, so more relevant detail steers it toward what you need.",1,"Yes. Your words are the steering wheel."],
+ ["It does not matter. Short questions work just as well.",0,"For simple facts, yes. For business writing, short questions get the average answer."]])}
+`);
+
+/* =========================================================
+   LEVEL 2
+   ========================================================= */
+level(2,"Chat with it well","Novice","The screen, plus the CO-STAR prompting framework");
+add(`
+<div class="eyebrow">Level 2 · Your first look at the screen</div>
+<h2>Claude, ChatGPT and Gemini all look roughly like this</h2>
+${words([["Chatbot","The app where you type to the model. You open it on the web, on your phone or on a computer."],["Chat","One conversation. Like one WhatsApp thread. You can start a new one any time."],["Prompt","Whatever you type into the box. Your instruction or question."]])}
+<div class="chips" id="appTabs"><button class="chip" aria-pressed="true" data-a="0">Claude</button><button class="chip" aria-pressed="false" data-a="1">ChatGPT</button><button class="chip" aria-pressed="false" data-a="2">Gemini</button></div>
+<div class="mock" id="chatMock"></div>
+<div class="legend" id="chatLegend"></div>
+${MOCKNOTE}
+`,()=>{
+  const A=[
+   {url:"claude.ai",side:["New chat","Chats","Projects","Artifacts"],tools:["+ Files","Connectors","Search"],model:"Claude model"},
+   {url:"chatgpt.com",side:["New chat","Search chats","Projects","GPTs"],tools:["+ Files","Apps","Search"],model:"ChatGPT model"},
+   {url:"gemini.google.com",side:["New chat","Recent","Gems","Saved info"],tools:["+ Files","Tools","Apps"],model:"Gemini model"}];
+  const el=document.getElementById('chatMock'),lg=document.getElementById('chatLegend');
+  const draw=i=>{const a=A[i];
+    el.innerHTML=`<div class="chrome"><i></i><i></i><i></i><span>${a.url}</span></div><div class="body">
+     <div class="side"><div class="it on"><span class="cb">1</span>${a.side[0]}</div><div class="it">${a.side[1]}</div><div class="it"><span class="cb">2</span>${a.side[2]}</div><div class="it">${a.side[3]}</div><div class="grp">Recent</div><div class="it">Weekly special</div><div class="it">Wedding quote</div></div>
+     <div class="pane"><div class="pill" style="align-self:flex-start"><span class="cb">3</span>${a.model} ▾</div>
+      <div class="msg me" style="align-self:flex-end;font-size:13px">Write a post about my cakes</div>
+      <div class="msg ai" style="font-size:13px">Here is a short post you could use…</div>
+      <div class="composer"><span class="ph"><span class="cb">4</span> Type your message here…</span><div class="tools"><span class="pill"><span class="cb">5</span>${a.tools[0]}</span><span class="pill"><span class="cb">6</span>${a.tools[1]}</span><span class="pill">${a.tools[2]}</span><span class="send">↑</span></div></div></div></div>`;
+    lg.innerHTML=[["1","Start a fresh conversation. Use a new chat for each new topic."],["2",`Folders and saved assistants. You will meet these in Levels 3 and 4. Here called "${a.side[2]}" and "${a.side[3]}".`],["3","Which model is answering. Bigger models think more deeply; smaller ones are faster."],["4","The message box. This is where your prompt goes."],["5","Attach files or photos: a price list, a receipt, a photo of your shop window."],["6",`Tools and connected apps (Level 5). Here called "${a.tools[1]}".`]].map(([n,t])=>`<div><span class="cb">${n}</span><span>${t}</span></div>`).join('');
+    document.querySelectorAll('#appTabs .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.a==i));};
+  document.querySelectorAll('#appTabs .chip').forEach(c=>c.onclick=()=>draw(+c.dataset.a));draw(0);
+});
+
+add(`
+<div class="eyebrow">Level 2 · Sarah's first try</div>
+<h2>She types one line. The answer is fine, and useless.</h2>
+<div class="panel chat">
+  <div class="msg me">Write a post about my cakes</div>
+  <div class="msg ai">Indulge in our delicious, freshly baked cakes! Made with love and the finest ingredients, perfect for any occasion. Treat yourself today! 🎂✨</div>
+</div>
+<p class="story">Sarah frowns. "This could be any bakery in the world. No price, no flavour, nothing about Ntinda, and my customers do not talk like that."</p>
+${coach("What went wrong","If your first instruction to a new staff member was 'write a post about my cakes,' you would get the same thing. <b>The AI was not briefed.</b> It filled every gap with the most average guess.")}
+`);
+
+add(`
+<div class="eyebrow">Level 2 · The CO-STAR framework</div>
+<h2>Brief it like you would brief a person</h2>
+${words([["Framework","A checklist you follow so you do not forget anything important."],["CO-STAR","A prompting checklist that won Singapore's national prompt engineering competition in 2023 and is now widely taught: Context, Objective, Style, Tone, Audience, Response."]])}
+<p>Tap each letter to add it to Sarah's prompt and watch the answer improve.</p>
+<div class="costar" id="costar"></div>
+<div class="panel">
+  <div class="label">Prompt strength</div>
+  <div class="meter" id="meter"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="label">Her prompt</div>
+  <div class="mono" id="prompt"></div>
+  <div class="label">What she gets back</div>
+  <div class="out" id="answer"></div>
+</div>
+`,()=>{
+  const parts=[["C","Context","Context: I run Namata Bakes, a small bakery in Ntinda, Kampala. Most orders come through WhatsApp."],
+   ["O","Objective","Objective: Write a WhatsApp status post to sell our new passion fruit cake this weekend."],
+   ["S","Style","Style: Short and chatty, like a friendly shop owner. Under 60 words."],
+   ["T","Tone","Tone: Warm and a bit playful. No over-the-top words like 'indulge'."],
+   ["A","Audience","Audience: Office workers and young mothers around Ntinda and Kyambogo."],
+   ["R","Response","Response: Give me 3 options. Each must include the price (UGX 45,000 for 1kg) and 'order on 0772 000 000'."]];
+  const ans=["Indulge in our delicious, freshly baked cakes! Made with love and the finest ingredients, perfect for any occasion. 🎂✨",
+   "Namata Bakes in Ntinda has fresh cakes ready! Order on WhatsApp today. 🎂",
+   "New at Namata Bakes: passion fruit cake, this weekend only! Order on WhatsApp. 🍰",
+   "Hey Ntinda! Our new passion fruit cake drops this weekend. Sweet, a little tangy, very fresh. Message us to book yours.",
+   "Hey Ntinda! Passion fruit cake lands this weekend. Tangy, soft, gone by Sunday. Book yours on WhatsApp before we run out.",
+   "Hey Ntinda! Office treat or Saturday surprise for the kids? Our new passion fruit cake is here this weekend. Soft, tangy and fresh.",
+   "Option 1: Office treat sorted! New passion fruit cake this weekend, 1kg for UGX 45,000. Order on 0772 000 000.<br>Option 2: Mummies of Ntinda, Saturday dessert is handled 😄 Passion fruit cake, UGX 45,000. Order on 0772 000 000.<br>Option 3: Tangy, soft, gone by Sunday. Passion fruit cake 1kg, UGX 45,000. Order on 0772 000 000."];
+  const on=parts.map(()=>false),box=document.getElementById('costar');
+  box.innerHTML=parts.map(([l,n],i)=>`<button aria-pressed="false" data-i="${i}"><b>${l}</b><span>${n}</span></button>`).join('');
+  const r=()=>{const n=on.filter(Boolean).length;document.querySelectorAll('#meter i').forEach((m,i)=>m.classList.toggle('on',i<n));
+    document.getElementById('prompt').innerHTML=n?parts.filter((_,i)=>on[i]).map(p=>p[2].replace(/^(\w+):/,'<mark>$1:</mark>')).join('\n'):'Write a post about my cakes';
+    document.getElementById('answer').innerHTML=ans[n];};
+  box.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;on[i]=!on[i];b.setAttribute('aria-pressed',on[i]);r();});r();
+});
+
+add(`
+<div class="eyebrow">Level 2 · Three habits of good chatters</div>
+<h2>The first answer is a draft. Talk back to it.</h2>
+<div class="panel"><ul class="clean" style="gap:14px">
+  <li><span class="dot a">1</span><div><h3>Reply, do not restart</h3><p class="small">"Make option 2 shorter." "Less emoji." "Add some local slang." It remembers the chat, so small corrections work.</p></div></li>
+  <li><span class="dot a">2</span><div><h3>Show an example</h3><p class="small">Paste a post that did well last month and say "write it like this one." Examples teach style faster than any description.</p></div></li>
+  <li><span class="dot a">3</span><div><h3>Let it interview you</h3><p class="small">End with "Ask me any questions you need before you start." It will ask about things you forgot to say.</p></div></li>
+</ul></div>
+<div class="panel chat">
+  <div class="msg me">Option 2 is good. Shorter, and add some local flavour.</div>
+  <div class="msg ai">Mummies of Ntinda, Saturday dessert is sorted! Passion fruit cake, UGX 45,000. Book chap chap on 0772 000 000.</div>
+</div>
+`);
+
+add(`
+<div class="eyebrow">Level 2 · Check</div>
+<h2>Which prompt would you send?</h2>
+${quiz("Sarah needs to reply to a customer asking for a birthday cake quote. Which prompt follows CO-STAR best?",[
+ ["Reply to this customer.",0,"No context, no price, no tone. The AI will guess everything."],
+ ["I run Namata Bakes in Ntinda. Reply to the WhatsApp message below asking for a 2kg birthday cake. Friendly and short. Our 2kg cakes are UGX 85,000, we need 3 days' notice and a 50% deposit. Give me one reply I can paste.",1,"Context, objective, style, tone, audience implied by the message, and a clear response format. This is a briefed new hire."],
+ ["Please, please write the best possible reply ever, it is very important!!",0,"Emotion is not information. The AI still does not know your prices or rules."]])}
+${reflect("l2","Think of one message you write over and over in your own business. What would the C (context) part of its prompt say?","e.g. I run a hardware shop in Bweyogerere. Customers are mostly builders…")}
+`);
+
+/* =========================================================
+   LEVEL 3
+   ========================================================= */
+level(3,"Give it context and memory","Apprentice","Files, projects and memory, so you stop repeating yourself");
+add(`
+<div class="eyebrow">Level 3 · Three ways to give it background</div>
+<h2>Sticky note, folder, and what the new hire remembers about you</h2>
+${words([["Context","All the background the AI can see while it answers: your prompt, the chat so far, and any files you attach."],["Context window","How much the AI can hold in view at once. Big, but not endless. A very long chat can push early details out."],["Project","A folder inside the chatbot with its own instructions and files. Every chat in the folder sees them."],["Memory","Facts the AI saves about you across chats, like your business name and how you like answers written."]])}
+<div class="grid3">
+  <div class="panel"><div class="label">1. Attach a file</div><p class="small">Like handing over a sticky note for <b>this one chat</b>. Good for a one-off: "Here is the supplier invoice, check it."</p></div>
+  <div class="panel"><div class="label">2. Use a project</div><p class="small">Like a labelled <b>folder</b> on the new hire's desk. Put the price list, menu and brand rules in a "Namata Marketing" project once. Every chat inside it already knows them.</p></div>
+  <div class="panel"><div class="label">3. Turn on memory</div><p class="small">Like the new hire <b>remembering you</b>. "Sarah prefers short answers and prices in UGX." It carries across all chats.</p></div>
+</div>
+${coach("Coach's note","Most beginners re-explain their business in every chat. Moving that explanation into a project is the single fastest upgrade you can make.")}
+`);
+
+add(`
+<div class="eyebrow">Level 3 · What a project looks like</div>
+<h2>Sarah's "Namata Marketing" project</h2>
+<div class="mock"><div class="chrome"><i></i><i></i><i></i><span>Projects › Namata Marketing</span></div>
+ <div class="pane" style="gap:12px">
+  <div class="field"><span><span class="cb">1</span> Project instructions</span><div class="v">You help Namata Bakes in Ntinda with marketing. Customers are office workers and young mothers. Warm, short, a bit playful. Always give prices in UGX. Never promise delivery outside Ntinda, Kyambogo and Naalya.</div></div>
+  <div class="field"><span><span class="cb">2</span> Files</span>
+   <div class="row2"><span>📄 Price list Oct 2026.pdf</span><span class="small">2 pages</span></div>
+   <div class="row2"><span>📄 Best posts that sold.docx</span><span class="small">12 examples</span></div>
+   <div class="row2"><span>🖼 Logo and colours.png</span><span class="small">image</span></div></div>
+  <div class="field"><span><span class="cb">3</span> Chats in this project</span>
+   <div class="row2"><span>Weekend special ideas</span><span class="small">Today</span></div>
+   <div class="row2"><span>Christmas hamper plan</span><span class="small">2 days ago</span></div></div>
+ </div></div>
+<div class="legend">
+ <div><span class="cb">1</span><span>Instructions every chat in the folder follows. Write them like a job description.</span></div>
+ <div><span class="cb">2</span><span>Reference files it can read. Update the price list here and every future chat uses the new prices.</span></div>
+ <div><span class="cb">3</span><span>Each chat inside the project starts already briefed.</span></div></div>
+${MOCKNOTE}
+<p class="small">Names: <b>Projects</b> in Claude and ChatGPT. In Gemini, a <b>Gem</b> can hold instructions and files in a similar way.</p>
+`);
+
+add(`
+<div class="eyebrow">Level 3 · Memory</div>
+<h2>What it remembers, and how you stay in control</h2>
+<div class="mock"><div class="chrome"><i></i><i></i><i></i><span>Settings › Memory</span></div>
+ <div class="pane">
+  <div class="row2"><span>Remember things from my chats</span><span class="tog on"></span></div>
+  <div class="label" style="margin-top:4px">What it has saved</div>
+  <div class="row2"><span>Runs Namata Bakes in Ntinda, 3 staff</span><span class="small">Delete</span></div>
+  <div class="row2"><span>Prefers short answers, prices in UGX</span><span class="small">Delete</span></div>
+  <div class="row2"><span>Main supplier delivers flour on Mondays</span><span class="small">Delete</span></div>
+ </div></div>
+${MOCKNOTE}
+<div class="grid2">
+ <div class="panel"><div class="label">Good to have it remember</div><ul class="clean"><li><span class="dot y">✓</span>Your business, role and location</li><li><span class="dot y">✓</span>How you like answers written</li><li><span class="dot y">✓</span>Standing facts, like delivery days</li></ul></div>
+ <div class="panel"><div class="label">Keep out of memory</div><ul class="clean"><li><span class="dot n">!</span>Passwords, PINs, account numbers</li><li><span class="dot n">!</span>Customer personal details</li><li><span class="dot n">!</span>Anything you would not want a colleague to read</li></ul></div>
+</div>
+${coach("Coach's note","You can view, edit or delete what is remembered, and you can switch memory off. Check it once a month like you would review a staff file. Names vary: <b>Memory</b> in Claude and ChatGPT, <b>saved info</b> or personal context in Gemini.")}
+`);
+
+add(`
+<div class="eyebrow">Level 3 · Check</div>
+<h2>Where should it go?</h2>
+${quiz("Sarah's prices change every January. Where should the price list live so every marketing chat uses the right numbers?",[
+ ["Typed into each new chat.",0,"That works but it is tiring, and one day she will paste the old list by mistake."],
+ ["As a file in her Marketing project, replaced when prices change.",1,"Yes. Update it once in the folder and every chat after that is correct."],
+ ["In memory.",0,"Memory is for short facts about you, not long documents that change. A project file is easier to replace."]])}
+${quiz("Which of these should Sarah NOT put into memory or a project?",[
+ ["Her brand tone: warm, short, playful.",0,"That is exactly what projects and memory are for."],
+ ["Her mobile money PIN so it can 'pay suppliers faster.'",1,"Correct. Never share PINs or passwords with any AI. Real payments should go through proper, approved tools with you confirming."],
+ ["The fact that flour arrives on Mondays.",0,"Harmless and useful. Fine to remember."]])}
+`);
+
+/* =========================================================
+   LEVEL 4
+   ========================================================= */
+level(4,"Save repeat work as skills","Apprentice","Write the how-to once, reuse it every week");
+add(`
+<div class="eyebrow">Level 4 · Spot the repeat</div>
+<h2>Some prompts you type every single week</h2>
+${words([["Skill","A saved set of instructions for one specific job, which the AI pulls out whenever that job comes up. Think of a recipe card for the AI."],["Custom GPT / Gem","ChatGPT's and Gemini's versions of the same idea: a saved assistant set up for one job."]])}
+<p class="story">Two weeks in, Sarah notices she types the same long brief every Monday for the weekly special, and another every Friday for the flour order. Her repeats are highlighted.</p>
+<div class="week">
+  <div class="day"><span class="d">Mon</span><span class="task rep">Weekly special post</span><span class="task">Pay staff</span></div>
+  <div class="day"><span class="d">Tue</span><span class="task rep">Reply to cake inquiries</span></div>
+  <div class="day"><span class="d">Wed</span><span class="task">Bank</span><span class="task rep">Reply to cake inquiries</span></div>
+  <div class="day"><span class="d">Thu</span><span class="task rep">Reply to cake inquiries</span></div>
+  <div class="day"><span class="d">Fri</span><span class="task rep">Supplier order email</span><span class="task">Clean ovens</span></div>
+</div>
+${coach("The rule","<b>If you type the same brief twice in a week, save it as a skill.</b> Then you only give the one thing that changes, like 'this week it is banana bread.'")}
+`);
+
+add(`
+<div class="eyebrow">Level 4 · Project or skill?</div>
+<h2>A project is a folder. A skill is a recipe card.</h2>
+<div class="grid2">
+ <div class="panel"><div class="label">Project</div><p>Background for a whole <b>area</b> of work. "Everything about marketing." Used for any chat inside that folder.</p></div>
+ <div class="panel"><div class="label">Skill</div><p>Steps for one <b>repeatable job</b>. "How we write the weekly special." The AI picks it up when that job comes up, in any chat.</p></div>
+</div>
+<div class="skill">
+  <header><span>weekly-special-post</span><span class="small" style="color:inherit;opacity:.8">Skill</span></header>
+  <div class="row"><div class="label">When to use it</div><p>When I ask for this week's special or a WhatsApp status post.</p></div>
+  <div class="row"><div class="label">Who we are</div><p>Namata Bakes, Ntinda. Office workers and young mothers. Order line 0772 000 000.</p></div>
+  <div class="row"><div class="label">How to write</div><p>Under 60 words, warm, a bit playful, a touch of local slang like 'chap chap', no 'indulge'. Always the price in UGX.</p></div>
+  <div class="row"><div class="label">Example that worked</div><p class="small">"Mummies of Ntinda, Saturday dessert is sorted! Passion fruit cake, UGX 45,000…"</p></div>
+  <div class="row"><div class="label">What to give back</div><p>3 options, numbered, ready to paste.</p></div>
+</div>
+`);
+
+add(`
+<div class="eyebrow">Level 4 · How to make one</div>
+<h2>Four steps, and the AI can do most of the writing</h2>
+<div class="steps static">
+ <div class="step"><span class="num">1</span><div><h3>Do the job well once in a normal chat</h3><p class="small">Use CO-STAR, correct it until you love the result.</p></div></div>
+ <div class="step"><span class="num">2</span><div><h3>Ask it to write the skill for you</h3><p class="small">"Turn what we just did into a reusable skill called weekly-special-post. Include when to use it, our rules, and the example I liked."</p></div></div>
+ <div class="step"><span class="num">3</span><div><h3>Read it and save it</h3><p class="small">Fix anything wrong. Save it in the skills area of settings, or as a custom GPT or Gem.</p></div></div>
+ <div class="step"><span class="num">4</span><div><h3>Test it in a fresh chat</h3><p class="small">"Weekly special: banana bread, UGX 15,000." If the result is off, improve the skill, not the chat.</p></div></div>
+</div>
+<div class="mock"><div class="chrome"><i></i><i></i><i></i><span>Settings › Skills</span></div>
+ <div class="pane">
+  <div class="row2"><span><b>weekly-special-post</b><br><span class="small">Writes the Monday WhatsApp special</span></span><span class="tog on"></span></div>
+  <div class="row2"><span><b>cake-inquiry-reply</b><br><span class="small">Quotes, lead time, deposit request</span></span><span class="tog on"></span></div>
+  <div class="row2"><span><b>supplier-order-email</b><br><span class="small">Friday flour and sugar order</span></span><span class="tog on"></span></div>
+  <div class="pill" style="align-self:flex-start">+ Create skill</div>
+ </div></div>
+${MOCKNOTE}
+`);
+
+add(`
+<div class="eyebrow">Level 4 · Before and after</div>
+<h2>From a long brief to one short line</h2>
+<div class="chips" id="ba"><button class="chip" aria-pressed="true" data-v="0">Before the skill</button><button class="chip" aria-pressed="false" data-v="1">With the skill</button></div>
+<div class="panel chat" id="baChat"></div>
+${coach("Coach's note","A skill keeps quality steady. When Sarah's assistant Brian posts on a busy day, the post still sounds like Namata Bakes. That is how you train a team, not just yourself.")}
+${quiz("Sarah's weekly special posts keep coming out too long. What is the best fix?",[
+ ["Tell it 'shorter' every Monday.",0,"That fixes this week only. Next Monday the same problem returns."],
+ ["Edit the skill so it says 'under 40 words' and add a short example.",1,"Yes. Fix the recipe card, not the single meal. Every future post improves."],
+ ["Stop using the skill.",0,"The skill is the right tool; it just needs a better instruction."]])}
+`,()=>{
+  const v=[`<div class="msg me">Context: I run Namata Bakes, a small bakery in Ntinda… Objective: Write a WhatsApp status post for… Style: Short and chatty, under 60 words… Tone: Warm, playful… Audience: Office workers and young mothers… Response: 3 options with price in UGX and 'order on 0772…'</div><div class="msg ai">Option 1: …</div><p class="small">About 110 words to type, every Monday.</p>`,
+   `<div class="msg me">Weekly special: banana bread, UGX 15,000</div><div class="msg ai">1. Banana bread is back, Ntinda! Soft, sweet, perfect with chai. UGX 15,000. Order on 0772 000 000.<br>2. Office snack sorted 😄 Fresh banana bread, UGX 15,000. Order chap chap, 0772 000 000.<br>3. Mummies, after-school treat handled. Banana bread loaf, UGX 15,000. Order on 0772 000 000.</div><p class="small">6 words. Same quality, every week.</p>`];
+  const c=document.getElementById('baChat'),set=i=>{c.innerHTML=v[i];document.querySelectorAll('#ba .chip').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v==i));};
+  document.querySelectorAll('#ba .chip').forEach(x=>x.onclick=()=>set(+x.dataset.v));set(0);
+});
+
+/* =========================================================
+   LEVEL 5
+   ========================================================= */
+level(5,"Connect your tools","Practitioner","Connectors and MCP, explained from the plug up");
+add(`
+<div class="eyebrow">Level 5 · How apps talk to each other</div>
+<h2>Before connectors, three words you need</h2>
+${words([["App","Any software you use: Gmail, Google Sheets, Canva, WhatsApp Business."],["API","A service window an app opens so other software can ask it for things. Like the hatch at a bakery counter where orders go in and bread comes out, without anyone walking into the kitchen."],["MCP","Model Context Protocol. A shared standard that lets an AI plug into any app's service window the same way. Think of it as one universal plug shape."],["Connector","A ready-made MCP plug for one specific app. 'The Canva connector' or 'the Gmail connector.'"]])}
+<svg class="illo" viewBox="0 0 360 200" role="img" aria-label="The AI in the middle connects through MCP plugs to Gmail, Sheets, Canva and Zapier">
+  <rect x="130" y="76" width="100" height="48" rx="10" fill="var(--accent)"/>
+  <text x="180" y="105" text-anchor="middle" font-size="14" font-weight="700" fill="var(--bg)">Your AI</text>
+  <g stroke="var(--accent)" stroke-width="2" fill="none" stroke-dasharray="4 3">
+    <path d="M130 90 L70 40"/><path d="M130 110 L70 160"/><path d="M230 90 L290 40"/><path d="M230 110 L290 160"/></g>
+  <g fill="var(--mark)" stroke="var(--ink)" stroke-width="1"><rect x="92" y="54" width="22" height="14" rx="3"/><rect x="92" y="132" width="22" height="14" rx="3"/><rect x="246" y="54" width="22" height="14" rx="3"/><rect x="246" y="132" width="22" height="14" rx="3"/></g>
+  <g font-size="9" text-anchor="middle" font-weight="700" fill="var(--ink)"><text x="103" y="64">MCP</text><text x="103" y="142">MCP</text><text x="257" y="64">MCP</text><text x="257" y="142">MCP</text></g>
+  <g fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"><rect x="10" y="20" width="80" height="34" rx="8"/><rect x="10" y="146" width="80" height="34" rx="8"/><rect x="270" y="20" width="80" height="34" rx="8"/><rect x="270" y="146" width="80" height="34" rx="8"/></g>
+  <g font-size="12" text-anchor="middle" fill="var(--ink)" font-weight="600"><text x="50" y="41">Gmail</text><text x="50" y="167">Google Sheets</text><text x="310" y="41">Canva</text><text x="310" y="167">Zapier</text></g>
+</svg>
+${coach("The idea in one line","Before MCP, every AI needed a custom cable for every app. MCP is like everyone agreeing on one plug shape, so any app that offers an MCP plug can work with any AI that supports MCP.")}
+`);
+
+add(`
+<div class="eyebrow">Level 5 · Connecting one</div>
+<h2>It is like giving the new hire a login, with limits</h2>
+<div class="mock"><div class="chrome"><i></i><i></i><i></i><span>Settings › Connectors</span></div>
+ <div class="pane">
+  <div class="row2"><span><span class="cb">1</span> <b>Browse connectors</b></span><span class="small">Gmail, Google Drive, Canva, Slack, Notion…</span></div>
+  <div class="row2"><span><b>Google Drive</b></span><span class="pill" style="color:var(--good)">Connected</span></div>
+  <div class="row2"><span><b>Canva</b></span><span class="pill"><span class="cb">2</span> Connect</span></div>
+  <div class="row2"><span><span class="cb">3</span> <b>Add custom connector</b></span><span class="small">paste an MCP link</span></div>
+  <div class="label" style="margin-top:6px"><span class="cb">4</span> Gmail permissions</div>
+  <div class="row2"><span>Read and search email</span><span class="tog on"></span></div>
+  <div class="row2"><span>Create drafts</span><span class="tog on"></span></div>
+  <div class="row2"><span>Send email</span><span class="small">Ask me every time</span></div>
+ </div></div>
+<div class="legend">
+ <div><span class="cb">1</span><span>A directory of official connectors. Start here.</span></div>
+ <div><span class="cb">2</span><span>Tap Connect, sign in to that app, and approve what the AI may do. Like signing a new hire up for one system.</span></div>
+ <div><span class="cb">3</span><span>For apps not in the directory, a custom connector takes an MCP address from the app maker. Only use links from sources you trust.</span></div>
+ <div><span class="cb">4</span><span>Permissions. Reading is low risk. Anything that changes or sends things should ask you first while you build trust.</span></div></div>
+${MOCKNOTE}
+<p class="small">Names: <b>Connectors</b> in Claude, <b>apps</b> in ChatGPT, <b>connected apps</b> in Gemini. Same idea.</p>
+`);
+
+add(`
+<div class="eyebrow">Level 5 · What changes once connected</div>
+<h2>Stop copying and pasting. Let it look for itself.</h2>
+<p>Tap to connect each app and see what Sarah can now ask.</p>
+<div class="plugs" id="plugs"></div>
+<div class="panel"><div class="label">What Sarah can now ask</div><div id="asks" class="chat"><p class="small">Nothing connected yet, so the AI only knows what she types.</p></div></div>
+`,()=>{
+  const p=[["Gmail","Supplier and customer emails","Did the sugar supplier reply about Monday's delivery? Draft a reply."],
+   ["Google Drive","Price list, recipes, contracts","Using our price list, quote a 3-tier wedding cake for 150 guests."],
+   ["Google Sheets","Daily sales and stock sheet","Which 3 products sold best last month, and which should I drop?"],
+   ["Canva","Brand templates and posters","Make this week's special poster from our brand template."]];
+  const on=p.map(()=>false),el=document.getElementById('plugs'),asks=document.getElementById('asks');
+  el.innerHTML=p.map(([n,d],i)=>`<button class="plug" aria-pressed="false" data-i="${i}"><b>${n}</b><span>${d}</span></button>`).join('');
+  el.querySelectorAll('.plug').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;on[i]=!on[i];b.setAttribute('aria-pressed',on[i]);
+    const l=p.filter((_,k)=>on[k]);asks.innerHTML=l.length?l.map(x=>`<div class="msg me">${x[2]}</div>`).join(''):'<p class="small">Nothing connected yet, so the AI only knows what she types.</p>';});
+});
+
+add(`
+<div class="eyebrow">Level 5 · Check</div>
+<h2>Connector safety</h2>
+${quiz("Sarah connects Gmail. Which setting is wisest for her first month?",[
+ ["Let it read, draft and send freely so it saves the most time.",0,"Too much trust too soon. One wrong email to a supplier costs more than the time saved."],
+ ["Let it read and create drafts, but she presses send herself.",1,"Yes. She gets most of the time saving and keeps the final say."],
+ ["Do not connect anything, ever.",0,"Then she misses the biggest jump in usefulness. Limits, not avoidance."]])}
+${quiz("A stranger on Facebook shares a 'free WhatsApp AI connector' link. What should Sarah do?",[
+ ["Add it as a custom connector. Free is good.",0,"A connector can read your data. Unknown links are a real risk."],
+ ["Only use connectors from the official directory or the app maker's own website.",1,"Correct. Treat a connector like giving someone keys to a room."],
+ ["Add it but only for a week.",0,"A week is plenty of time to copy your emails or customer list."]])}
+`);
+
+/* =========================================================
+   LEVEL 6
+   ========================================================= */
+level(6,"Build workflows","Practitioner","Chain steps into one routine with a check-in point");
+add(`
+<div class="eyebrow">Level 6 · From one task to a routine</div>
+<h2>A workflow is a recipe with several steps</h2>
+${words([["Workflow","A fixed sequence of steps that runs the same way every time. Step 1, then 2, then 3."],["Trigger","What starts the workflow. A message from you, a time of day, or an event like a new order arriving."],["Human in the loop","A planned stop where a person checks and approves before the workflow continues."],["Automation tool","Apps like Zapier, Make or n8n that move information between apps on their own. Many now offer MCP plugs too."]])}
+<p class="story">Sarah's Friday supplier order used to take 40 minutes. Here is the same job as a workflow.</p>
+<div class="panel chat"><div class="msg me">Supplier order for next week</div></div>
+<div class="steps" id="steps">
+  <div class="step"><span class="num">1</span><div><span class="src">Trigger + skill</span><p>Her message starts it. The AI loads the "supplier-order-email" skill.</p></div></div>
+  <div class="step"><span class="num">2</span><div><span class="src">Google Sheets</span><p>Reads the stock sheet: 2 bags of flour left, sugar low, eggs fine.</p></div></div>
+  <div class="step"><span class="num">3</span><div><span class="src">Google Sheets</span><p>Looks at the last 4 Fridays of sales and suggests 12 bags of flour, not the usual 10.</p></div></div>
+  <div class="step"><span class="num">4</span><div><span class="src">Gmail</span><p>Writes the order as a <b>draft</b> to her usual supplier.</p></div></div>
+  <div class="step"><span class="num you">5</span><div><span class="src">Sarah · human in the loop</span><p>Changes 12 to 11 because a wedding order was cancelled, and presses send herself.</p></div></div>
+</div>
+<button class="btn ghost sm" id="play" style="align-self:flex-start">Play the steps</button>
+`,()=>{const s=[...document.querySelectorAll('#steps .step')],play=()=>{s.forEach(x=>x.classList.remove('on'));s.forEach((x,i)=>setTimeout(()=>x.classList.add('on'),i*650));};document.getElementById('play').onclick=play;setTimeout(play,300);});
+
+add(`
+<div class="eyebrow">Level 6 · Two ways to build one</div>
+<h2>Inside the chatbot, or in an automation tool</h2>
+<div class="grid2">
+ <div class="panel"><div class="label">Inside the chatbot</div><p>A skill plus connectors. You start it with a message. Best when the steps need judgement, like deciding how much flour.</p><p class="small">Easy to set up. Runs when you ask.</p></div>
+ <div class="panel"><div class="label">In an automation tool</div><p>A drawn flow of boxes in Zapier, Make or n8n. Best for exact, boring hand-offs: "When a form is filled, add a row to the sheet."</p><p class="small">Runs on its own. Can call an AI as one of its steps.</p></div>
+</div>
+<div class="mock"><div class="chrome"><i></i><i></i><i></i><span>Automation tool · flow editor</span></div>
+ <div class="pane" style="gap:6px">
+  <div class="row2"><span><span class="label">Trigger</span><br>New Google Form order</span><span class="small">⚡</span></div><div class="small" style="text-align:center">↓</div>
+  <div class="row2"><span><span class="label">AI step</span><br>Write a thank-you message and estimate ready time</span><span class="small">✦</span></div><div class="small" style="text-align:center">↓</div>
+  <div class="row2"><span><span class="label">Action</span><br>Add row to Orders sheet</span><span class="small">▦</span></div><div class="small" style="text-align:center">↓</div>
+  <div class="row2"><span><span class="label">Action</span><br>Send WhatsApp Business template message</span><span class="small">✉</span></div>
+ </div></div>
+${MOCKNOTE}
+${coach("Expert tip","The strongest setups combine both. The AI handles the thinking. The automation tool handles the reliable plumbing between apps. Level 9 uses exactly this.")}
+`);
+
+add(`
+<div class="eyebrow">Level 6 · Exercise</div>
+<h2>Put the cake inquiry workflow in order</h2>
+<p>Tap the steps in the order they should happen.</p>
+<div class="ord" id="ord"></div>
+<div class="why" id="ordWhy" hidden></div>
+<button class="btn ghost sm" id="ordReset" style="align-self:flex-start">Reset</button>
+${reflect("l6","Which routine in your business has 3 or more steps you repeat every week? List the steps.","e.g. Every month-end: pull sales, compare with last month, write a note to my partner…")}
+`,()=>{
+  const correct=["A customer WhatsApp message arrives (trigger)","AI reads the request and checks the price list in Drive","AI checks the order calendar for free days","AI drafts a reply with price, date and deposit request","Sarah approves the reply","The reply is sent and the order is added to the calendar"];
+  const order=[3,0,5,1,4,2];let picked=[];const el=document.getElementById('ord'),why=document.getElementById('ordWhy');
+  const r=()=>{el.innerHTML=order.map(i=>{const k=picked.indexOf(i);return `<button data-i="${i}" class="${k>-1?'picked':''}"><span class="k">${k>-1?k+1:''}</span>${correct[i]}</button>`}).join('');
+    el.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(picked.includes(i))return;picked.push(i);r();
+      if(picked.length===correct.length){const ok=picked.every((v,k)=>v===k);why.hidden=false;why.innerHTML=ok?'<b>Spot on.</b> Trigger, gather facts, check availability, draft, human approval, then act. That approval step sits just before anything goes out.':'<b>Close.</b> The right order is: message arrives, check prices, check the calendar, draft, Sarah approves, then send and log. The key is that approval comes right before anything is sent.';}});};
+  document.getElementById('ordReset').onclick=()=>{picked=[];why.hidden=true;r();};r();
+});
+
+/* =========================================================
+   LEVEL 7
+   ========================================================= */
+level(7,"Work with agents","Builder","When the AI plans its own steps and uses tools");
+add(`
+<div class="eyebrow">Level 7 · What is an agent?</div>
+<h2>A workflow follows your steps. An agent works out the steps.</h2>
+${words([["Agent","An AI given a goal and a set of tools, which plans its own steps, uses the tools, checks the results and keeps going until the job is done."],["Tool","Anything the agent can use: web search, a connector, a spreadsheet, a browser."],["Loop","The agent's cycle: think, act, look at the result, think again."],["Subagent","A helper agent the main agent sends off to do one part, like a supervisor handing a task to a junior."]])}
+<div class="loopwrap"><svg viewBox="0 0 320 250" class="illo" style="max-width:360px" role="img" aria-label="The agent loop: plan, use a tool, check the result, repeat until done">
+  <defs><marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="var(--accent)"/></marker></defs>
+  <rect x="110" y="6" width="100" height="34" rx="17" fill="var(--mark)"/><text x="160" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">Goal</text>
+  <path d="M160 40 V62" stroke="var(--accent)" stroke-width="2" marker-end="url(#ar2)"/>
+  <circle cx="160" cy="150" r="78" fill="none" stroke="var(--line)" stroke-width="2"/>
+  <path d="M206 88 A78 78 0 0 1 236 162" fill="none" stroke="var(--accent)" stroke-width="2" marker-end="url(#ar2)"/>
+  <path d="M210 210 A78 78 0 0 1 110 210" fill="none" stroke="var(--accent)" stroke-width="2" marker-end="url(#ar2)"/>
+  <path d="M84 162 A78 78 0 0 1 114 88" fill="none" stroke="var(--accent)" stroke-width="2" marker-end="url(#ar2)"/>
+  <g fill="var(--surface)" stroke="var(--accent)" stroke-width="1.5"><rect x="120" y="62" width="80" height="30" rx="8"/><rect x="226" y="150" width="84" height="30" rx="8"/><rect x="10" y="150" width="84" height="30" rx="8"/></g>
+  <g font-size="12.5" text-anchor="middle" font-weight="600" fill="var(--ink)"><text x="160" y="82">1. Plan</text><text x="268" y="170">2. Use a tool</text><text x="52" y="170">3. Check</text></g>
+  <text x="160" y="152" text-anchor="middle" font-size="11.5" fill="var(--muted)">repeat until</text><text x="160" y="167" text-anchor="middle" font-size="11.5" fill="var(--muted)">the goal is met</text>
+  <rect x="115" y="214" width="90" height="30" rx="15" fill="var(--accent)"/><text x="160" y="234" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--bg)">Done · report</text>
+</svg></div>
+${coach("New hire picture","A workflow is a staff member following your checklist exactly. An agent is a trusted staff member you tell, 'Find us a cheaper flour supplier in Kampala,' and who figures out the calls to make, then reports back.")}
+`);
+
+add(`
+<div class="eyebrow">Level 7 · An agent at work</div>
+<h2>Sarah asks: "Find me a cheaper flour supplier"</h2>
+<div class="mock"><div class="chrome"><i></i><i></i><i></i><span>Agent task · running</span></div>
+ <div class="pane" style="gap:8px">
+  <div class="msg me" style="font-size:13px">Find 3 flour suppliers in Kampala cheaper than our current one. Compare price per 50kg bag, delivery to Ntinda and minimum order. Do not contact anyone.</div>
+  <div class="row2"><span>🧠 Plan: get current price, search suppliers, compare, report</span><span class="small">step 1</span></div>
+  <div class="row2"><span>▦ Read last 3 invoices in Drive: UGX 158,000 per bag</span><span class="small">tool: Drive</span></div>
+  <div class="row2"><span>🔎 Searched the web for wholesale flour suppliers Kampala</span><span class="small">tool: search</span></div>
+  <div class="row2"><span>🔎 Opened 6 supplier pages, 2 had no prices, skipped</span><span class="small">tool: browser</span></div>
+  <div class="row2"><span>✓ Checked: all prices are per 50kg bag</span><span class="small">check</span></div>
+  <div class="row2" style="border-color:var(--good)"><span><b>Done.</b> Table of 3 options, sources linked. Two need phone calls to confirm delivery.</span><span class="small">report</span></div>
+ </div></div>
+${MOCKNOTE}
+<p class="small">The prices in this drawing are made up. A real agent would show its sources so you can check them.</p>
+<p class="small">Names: Claude can work through long multi-step tasks with tools; ChatGPT calls its version <b>agent</b>; Gemini has an <b>agent mode</b>. The underlying loop is the same.</p>
+`);
+
+add(`
+<div class="eyebrow">Level 7 · Choosing the right tool</div>
+<h2>Chat, workflow or agent?</h2>
+<div class="panel"><div class="scroll"><table>
+<tr><th>Use</th><th>When the job is…</th><th>Bakery example</th></tr>
+<tr><td>Chat</td><td>One-off, you are present</td><td>"Help me price a new cupcake box."</td></tr>
+<tr><td>Skill</td><td>Repeated, same format each time</td><td>The weekly special post</td></tr>
+<tr><td>Workflow</td><td>Repeated, same steps each time</td><td>Friday supplier order</td></tr>
+<tr><td>Agent</td><td>A goal where the steps are not known in advance</td><td>"Research 5 new corporate clients near Naalya."</td></tr>
+</table></div></div>
+${coach("Expert tip","Do not use an agent where a workflow will do. Agents are powerful but less predictable and slower. Give them a clear goal, a limited set of tools, and rules like 'do not contact anyone' or 'do not spend money.'")}
+${quiz("Which instruction to an agent is safest and most useful?",[
+ ["Grow my business.",0,"Far too vague. It will wander and you cannot judge if it succeeded."],
+ ["Find 5 offices within 3km of Ntinda that might order staff birthday cakes. Give names, why they fit, and a public contact. Do not send any messages.",1,"Clear goal, clear output, clear limit. That is a well-briefed agent."],
+ ["Email every company in Kampala offering cakes.",0,"Mass emailing strangers risks your reputation and spam rules. Keep a human in the loop for outreach."]])}
+`);
+
+/* =========================================================
+   LEVEL 8
+   ========================================================= */
+level(8,"Put it on a schedule","Builder","Scheduled tasks that run while you bake");
+add(`
+<div class="eyebrow">Level 8 · Scheduled tasks</div>
+<h2>Give the new hire a weekly timetable</h2>
+${words([["Scheduled task","A prompt you save with a time, like 'every Monday at 7am.' The AI runs it on its own at that time, even if your phone is off."],["Run","One time the task happens. 'Monday's run.'"],["Notification","How it tells you it finished: a phone alert or an email."]])}
+<div class="mock"><div class="chrome"><i></i><i></i><i></i><span>New scheduled task</span></div>
+ <div class="pane" style="gap:10px">
+  <div class="field"><span><span class="cb">1</span> Name</span><div class="v">Monday marketing pack</div></div>
+  <div class="field"><span><span class="cb">2</span> Instructions</span><div class="v">Use the weekly-special-post skill. Read the Sales sheet for last week. Pick the product to push. Write 3 post options and send them to me for approval.</div></div>
+  <div class="grid2" style="gap:8px"><div class="field"><span><span class="cb">3</span> Repeats</span><div class="v">Every Monday</div></div><div class="field"><span>Time</span><div class="v">7:00 am (Kampala)</div></div></div>
+  <div class="row2"><span><span class="cb">4</span> Notify me when it is done</span><span class="tog on"></span></div>
+  <div class="row2"><span><span class="cb">5</span> Ask me before it sends or posts</span><span class="tog on"></span></div>
+ </div></div>
+<div class="legend">
+ <div><span class="cb">1</span><span>A clear name so you recognise it in your list.</span></div>
+ <div><span class="cb">2</span><span>The prompt. Write it fully, because each run starts fresh without your chat history.</span></div>
+ <div><span class="cb">3</span><span>When it runs. Daily, weekly, or once.</span></div>
+ <div><span class="cb">4</span><span>How you hear back.</span></div>
+ <div><span class="cb">5</span><span>Your safety brake. Keep it on until you trust the output.</span></div></div>
+${MOCKNOTE}
+<p class="small">Names: <b>scheduled tasks</b> in Claude, <b>tasks</b> in ChatGPT, <b>scheduled actions</b> in Gemini. Which plans include them varies.</p>
+`);
+
+add(`
+<div class="eyebrow">Level 8 · Check</div>
+<h2>Writing a good scheduled task</h2>
+${quiz("Sarah's scheduled task says only: 'Do the usual Monday thing.' The first run produces nonsense. Why?",[
+ ["The AI was lazy that morning.",0,"It is not lazy. It simply had nothing to go on."],
+ ["Each run starts fresh, so 'the usual' means nothing. The task needs full instructions or a named skill.",1,"Right. A scheduled run is like a temp who arrives without a handover. Spell it out, or point it to the skill."],
+ ["Scheduled tasks only work at night.",0,"They work at any time you set."]])}
+${reflect("l8","What is one report or message in your business that should arrive on a schedule? When should it run?","e.g. Every Friday 5pm: a summary of this week's sales versus last week…")}
+`);
+
+/* =========================================================
+   LEVEL 9
+   ========================================================= */
+level(9,"Capstone: an AI marketing department","Expert","Everything joined up, end to end, every Monday");
+add(`
+<div class="eyebrow">Level 9 · The goal</div>
+<h2>Every Monday morning, marketing that plans, designs and posts itself</h2>
+<p class="story">Sarah wants this: at 7am Monday, the AI looks at last week's sales, picks what to push, writes the posts, designs a poster in Canva, and gets it onto WhatsApp, Instagram and Facebook. She only taps "approve" while the ovens heat up.</p>
+<div class="panel"><div class="label">The system, layer by layer</div><div class="arch">
+ <div class="lane"><span class="ln">Trigger</span><div class="bx"><span class="hl">Scheduled task · Mon 7:00</span></div></div>
+ <div class="lane"><span class="ln">Brain</span><div class="bx"><span class="hl">AI model</span><span>Marketing project</span><span>Memory</span></div></div>
+ <div class="lane"><span class="ln">Know-how</span><div class="bx"><span>weekly-marketing skill</span><span>brand rules</span></div></div>
+ <div class="lane"><span class="ln">Read</span><div class="bx"><span>Google Sheets: sales</span><span>Drive: price list</span><span>Calendar: holidays</span></div></div>
+ <div class="lane"><span class="ln">Create</span><div class="bx"><span>Canva connector: poster</span></div></div>
+ <div class="lane"><span class="ln">Approve</span><div class="bx"><span class="you">Sarah taps approve</span></div></div>
+ <div class="lane"><span class="ln">Publish</span><div class="bx"><span>Automation tool (Zapier / Make)</span><span>Instagram + Facebook</span><span>WhatsApp Business broadcast</span></div></div>
+ <div class="lane"><span class="ln">Learn</span><div class="bx"><span>Results logged to the sheet</span></div></div>
+</div></div>
+${coach("Notice","Every layer is something you already learned. Level 9 is not new technology. It is the levels stacked together.")}
+`);
+
+add(`
+<div class="eyebrow">Level 9 · The honest part about WhatsApp</div>
+<h2>Know what each platform allows before you design</h2>
+${words([["WhatsApp Business Platform","Meta's official system for businesses to send messages through software. Usually reached through a provider such as Twilio or 360dialog."],["Message template","A pre-approved message format. Marketing messages to customers must use approved templates, and customers must have agreed to receive them."],["Opt-in","A customer's permission to be messaged, like ticking 'yes, send me offers.'"]])}
+<div class="panel"><div class="scroll"><table>
+<tr><th>Channel</th><th>Can the system post it automatically?</th><th>How</th></tr>
+<tr><td>Instagram and Facebook page</td><td>Yes</td><td>Through Meta's official publishing tools, usually via an automation tool like Zapier, Make or Buffer</td></tr>
+<tr><td>WhatsApp broadcast to customers</td><td>Yes, with rules</td><td>WhatsApp Business Platform, an approved marketing template, only to customers who opted in. Meta charges per marketing message</td></tr>
+<tr><td>WhatsApp Status</td><td>Not officially</td><td>The official platform does not post Status. Third-party tools that claim to are unofficial and can get a number banned. Sarah posts Status herself in two taps from the approved poster</td></tr>
+</table></div></div>
+${coach("Expert habit","Experts check the rules of each platform first, then design. A clever system that gets your WhatsApp number banned is worse than no system. Rules change, so check the current policy before you build.")}
+`);
+
+add(`
+<div class="eyebrow">Level 9 · Monday, minute by minute</div>
+<h2>Watch one full run</h2>
+<div class="steps" id="cap">
+ <div class="step"><span class="num">7:00</span><div><span class="src">Scheduled task</span><p>"Monday marketing pack" starts. It loads the Marketing project and the weekly-marketing skill.</p></div></div>
+ <div class="step"><span class="num">7:01</span><div><span class="src">Google Sheets</span><p>Reads last week's sales. Banana bread up 30%. Passion fruit cake slow. Results from last week's posts are in the Log tab.</p></div></div>
+ <div class="step"><span class="num">7:02</span><div><span class="src">Drive + Calendar</span><p>Checks the price list (UGX 15,000) and spots a public holiday on Friday.</p></div></div>
+ <div class="step"><span class="num">7:03</span><div><span class="src">AI thinking</span><p>Decides: push banana bread for the long weekend, with a 2-for-1 on passion fruit to clear stock.</p></div></div>
+ <div class="step"><span class="num">7:04</span><div><span class="src">Canva connector</span><p>Creates a poster from Sarah's brand template, square for Instagram and tall for Status.</p></div></div>
+ <div class="step"><span class="num">7:05</span><div><span class="src">Approval message</span><p>Sends Sarah the poster plus 3 captions with Approve, Edit or Skip.</p></div></div>
+ <div class="step"><span class="num you">7:20</span><div><span class="src">Sarah</span><p>Picks caption 2, changes "long weekend" to "holiday weekend," approves.</p></div></div>
+ <div class="step"><span class="num">7:21</span><div><span class="src">Automation tool</span><p>Posts to Instagram and Facebook. Sends the WhatsApp template to the opted-in customer list.</p></div></div>
+ <div class="step"><span class="num you">7:22</span><div><span class="src">Sarah</span><p>Posts the tall poster to her WhatsApp Status from her phone.</p></div></div>
+ <div class="step"><span class="num">Fri</span><div><span class="src">Google Sheets</span><p>A small Friday task logs likes, replies and orders, so next Monday's run learns what worked.</p></div></div>
+</div>
+<button class="btn ghost sm" id="capPlay" style="align-self:flex-start">Play the morning</button>
+`,()=>{const s=[...document.querySelectorAll('#cap .step')],play=()=>{s.forEach(x=>x.classList.remove('on'));s.forEach((x,i)=>setTimeout(()=>x.classList.add('on'),i*550));};document.getElementById('capPlay').onclick=play;setTimeout(play,300);});
+
+add(`
+<div class="eyebrow">Level 9 · What Sarah set up, once</div>
+<h2>The build list</h2>
+<p>This took Sarah about two afternoons, spread over a fortnight. Tick as you build your own.</p>
+<div class="panel" id="build"></div>
+${coach("Why approval stays on","Even experts keep a human approving anything public. It costs Sarah one minute a week and protects the brand she spent years building. Some experts switch it off for low-risk channels after months of clean results, never on day one.")}
+`,()=>{
+  const items=[["Accounts","Claude or ChatGPT plan that supports connectors and scheduled tasks"],["Accounts","Canva with a brand template, Instagram and Facebook business pages, a WhatsApp Business Platform number through a provider"],["Level 3","A Marketing project with instructions, price list and best past posts"],["Level 4","The weekly-marketing skill, tested in a fresh chat"],["Level 5","Connectors: Google Sheets, Drive, Calendar, Canva"],["Level 6","An automation tool flow: when approved, post to Instagram, Facebook and send the WhatsApp template"],["Level 6","Customer opt-in collected at the counter and on order forms"],["Level 8","The Monday 7:00 scheduled task, with ask-before-posting on"],["Level 8","A Friday task that logs results back into the sheet"],["Test","Two dry runs posting to a private test page before going live"]];
+  const sv=store.get('build',{}),el=document.getElementById('build');
+  el.innerHTML=items.map(([w,t],i)=>`<div class="check"><input type="checkbox" id="b${i}" ${sv[i]?'checked':''}><label for="b${i}"><span class="when">${w}</span><span>${t}</span></label></div>`).join('');
+  el.querySelectorAll('input').forEach((c,i)=>c.onchange=()=>{sv[i]=c.checked;store.set('build',sv);});
+});
+
+add(`
+<div class="eyebrow">Level 9 · Check</div>
+<h2>Troubleshoot the system</h2>
+${quiz("Monday's poster shows last year's price for banana bread. Which layer is most likely wrong?",[
+ ["The scheduled task's time.",0,"Timing would not change a price."],
+ ["The price list file in the project or Drive is out of date.",1,"Yes. The AI used the facts it was given. Fix the source, and every future run is right."],
+ ["Canva is broken.",0,"Canva drew what it was told."]])}
+${quiz("Sarah wants the system to post to WhatsApp Status automatically too. What is your advice?",[
+ ["Find an unofficial tool that does it.",0,"Unofficial tools that log into personal WhatsApp can get the number banned. Her order line is too valuable to risk."],
+ ["Keep Status as a two-tap manual step and automate the channels that are officially supported.",1,"That is the expert answer. Automate what is allowed, keep a person on what is not."],
+ ["Stop using WhatsApp.",0,"It is her main sales channel. The answer is to use it within the rules."]])}
+${reflect("l9","Sketch your own Monday system. What is the trigger, what does it read, what does it make, who approves, and where does it go?","Trigger: … Reads: … Makes: … Approves: … Publishes to: …")}
+`);
+
+/* =========================================================
+   LEVEL 10
+   ========================================================= */
+level(10,"Expert habits","Expert","How you keep the system good, safe and worth it");
+add(`
+<div class="eyebrow">Level 10 · What experts do differently</div>
+<h2>Seven habits of people who are great at this</h2>
+<div class="panel"><ul class="clean" style="gap:14px">
+ <li><span class="dot a">1</span><div><h3>Start small, then stack</h3><p class="small">One good skill beats a giant broken system. Add one layer at a time and test each.</p></div></li>
+ <li><span class="dot a">2</span><div><h3>Least access</h3><p class="small">Give each connector only the permissions its job needs. Review them every quarter.</p></div></li>
+ <li><span class="dot a">3</span><div><h3>Fix the source, not the output</h3><p class="small">When something is wrong, improve the skill, the file or the instructions so it never happens again.</p></div></li>
+ <li><span class="dot a">4</span><div><h3>Keep humans on anything public or costly</h3><p class="small">Posts, payments, emails to clients. Approval first.</p></div></li>
+ <li><span class="dot a">5</span><div><h3>Ask for sources</h3><p class="small">For any fact or number, ask "where did that come from?" and check it.</p></div></li>
+ <li><span class="dot a">6</span><div><h3>Measure the time saved</h3><p class="small">Note minutes saved per week. Drop anything that costs more to check than it saves.</p></div></li>
+ <li><span class="dot a">7</span><div><h3>Expect change</h3><p class="small">Screens, names and features change every few months. The ideas in this course do not.</p></div></li>
+</ul></div>
+`);
+
+add(`
+<div class="eyebrow">Level 10 · Final check</div>
+<h2>Are you thinking like an expert?</h2>
+${quiz("A new staff member at Namata Bakes asks, 'Should I just let the AI handle customer complaints by itself?' Best answer?",[
+ ["Yes, it is faster.",0,"Complaints carry emotion and money. A wrong reply can lose a customer for good."],
+ ["Let it draft replies using a complaints skill, with a manager approving each one, and review the drafts weekly to improve the skill.",1,"That is the expert pattern: skill, human approval, and a loop to improve."],
+ ["Never use AI for customers.",0,"Drafting with approval is safe and saves real time."]])}
+${quiz("Put these in the order you would build them for a new business:",[
+ ["Agent first, then skills, then prompts.",0,"That is building the roof before the walls."],
+ ["Good prompts, then a project, then skills, then connectors, then workflows and schedules, then agents where needed.",1,"Yes. Each layer stands on the one below it, exactly like the levels of this course."],
+ ["Connectors first, everything else later.",0,"Connecting before you can brief well just gives a confused new hire more keys."]])}
+`);
+
+add(`
+<div class="eyebrow">You made it</div>
+<h2>From first message to running a department</h2>
+<div class="panel" style="align-items:flex-start"><div class="label">Your check score</div><div class="score" id="score">0</div><p class="small" id="scoreNote"></p></div>
+<div class="panel"><div class="label">Your next 30 days</div><div id="plan"></div></div>
+${coach("Remember the new hire","Brief them well (Level 2). Hand them the files (3). Write their recipe cards (4). Give them limited logins (5). Teach them routines (6). Trust them with goals (7). Give them a timetable (8). Let them run a department with your sign-off (9). And keep coaching them (10).")}
+`,()=>{
+  const res=store.get('quiz',{}),tot=Object.keys(QUIZ).length,ok=Object.values(res).filter(v=>v===true).length,done=Object.keys(res).filter(k=>!k.endsWith('i')).length;
+  document.getElementById('score').textContent=`${ok} / ${tot}`;
+  document.getElementById('scoreNote').textContent=done<tot?`You answered ${done} of ${tot}. Open Levels to revisit any you skipped.`:'Every check answered. First tries count, so a lower score just shows where to revisit.';
+  const items=[["Week 1","Use CO-STAR for every work prompt. Start a project for your main area of work."],["Week 2","Turn your two most repeated prompts into skills. Test each in a fresh chat."],["Week 3","Connect one app with read and draft permissions only. Build one workflow with an approval step."],["Week 4","Add one scheduled task. Try one small agent task with clear limits. Write down hours saved."]];
+  const sv=store.get('plan',{}),el=document.getElementById('plan');
+  el.innerHTML=items.map(([w,t],i)=>`<div class="check"><input type="checkbox" id="p${i}" ${sv[i]?'checked':''}><label for="p${i}"><span class="when">${w}</span><span>${t}</span></label></div>`).join('');
+  el.querySelectorAll('input').forEach((c,i)=>c.onchange=()=>{sv[i]=c.checked;store.set('plan',sv);});
+});
+
+/* ---------- engine ---------- */
+let cur=0,inMenu=false;
+const main=document.getElementById('main'),back=document.getElementById('back'),next=document.getElementById('next');
+function wireCommon(){
+  const res=store.get('quiz',{});
+  main.querySelectorAll('[data-quiz]').forEach(q=>{const id=q.dataset.quiz,opts=QUIZ[id],why=q.querySelector('.why');
+    const reveal=(i)=>{q.querySelectorAll('.opt').forEach((b,k)=>{if(opts[k][1])b.classList.add('right');else if(k===i)b.classList.add('wrong');});why.hidden=false;why.innerHTML=(opts[i][1]?'<b>Correct.</b> ':'<b>Not quite.</b> ')+opts[i][2];};
+    if(res[id+'i']!=null) reveal(res[id+'i']);
+    q.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,r=store.get('quiz',{});
+      if(r[id]==null){r[id]=!!opts[i][1];} r[id+'i']=i; store.set('quiz',r);
+      q.querySelectorAll('.opt').forEach(x=>x.classList.remove('right','wrong'));reveal(i);});});
+  main.querySelectorAll('[data-reflect]').forEach(t=>{t.value=store.get('r-'+t.dataset.reflect,'');t.oninput=()=>store.set('r-'+t.dataset.reflect,t.value);});
+}
+function go(i){inMenu=false;cur=Math.max(0,Math.min(S.length-1,i));
+  main.innerHTML=`<section class="scene">${S[cur].html}</section>`;main.scrollTop=0;
+  wireCommon();S[cur].init&&S[cur].init();
+  const lv=S[cur].lv;document.getElementById('chap').textContent=lv.n?`Level ${lv.n}`:'Start';
+  document.getElementById('rank').textContent=lv.rank;
+  document.getElementById('bar').style.width=(cur/(S.length-1)*100)+'%';
+  document.getElementById('count').textContent=`${cur+1} / ${S.length}`;
+  back.disabled=cur===0;next.textContent=cur===0?'Begin':cur===S.length-1?'Start over':'Next';
+  try{history.replaceState(null,'','#s'+cur)}catch(e){}}
+back.onclick=()=>go(cur-1);
+next.onclick=()=>go(cur===S.length-1?0:cur+1);
+document.getElementById('menuBtn').onclick=()=>{if(inMenu){go(cur);return;}inMenu=true;
+  main.innerHTML=`<section class="scene"><div class="eyebrow">Jump to a level</div><div class="menu">${LEVELS.map(l=>`<button data-go="${l.start}"><b>${l.n?l.n+'. ':''}${l.name}</b><span>${l.rank||'Intro'}</span></button>`).join('')}</div></section>`;
+  main.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(+b.dataset.go));};
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='ArrowRight')next.click();if(e.key==='ArrowLeft'&&!back.disabled)back.click();});
+async function startApp(){
+  const h=(location.hash.match(/^#s(\d+)$/)||[])[1];
+  try{
+    const response=await fetch('/api/progress');
+    if(!response.ok)throw new Error('Progress load failed.');
+    const {progress={}}=await response.json();
+    const localProgress={};
+    for(const localKey of store.keys()){
+      const key=localKey.slice(4);
+      try{localProgress[key]=JSON.parse(localStorage.getItem(localKey));}catch(e){}
+    }
+    for(const [key,value] of Object.entries(localProgress)){
+      if(!Object.prototype.hasOwnProperty.call(progress,key)){
+        const saved=await fetch('/api/progress',{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify({key,value})});
+        if(!saved.ok)throw new Error('Progress migration failed.');
+      }
+    }
+    for(const [key,value] of Object.entries(progress)){
+      try{localStorage.setItem('sla-'+key,JSON.stringify(value));}catch(e){}
+    }
+    syncEnabled=true;
+    setSyncStatus('Synced');
+  }catch(e){
+    syncEnabled=location.protocol==='http:'||location.protocol==='https:';
+    setSyncStatus('Local only');
+  }
+  go(h?+h:0);
+}
+startApp();
+</script>
+
+</body></html>
